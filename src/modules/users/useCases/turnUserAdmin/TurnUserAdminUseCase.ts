@@ -1,15 +1,23 @@
 import { User } from "../../model/User";
-import { IUsersRepository } from "../../repositories/IUsersRepository";
+import { UsersRepository } from "../../repositories/implementations/UsersRepository";
 
 interface IRequest {
   user_id: string;
 }
 
 class TurnUserAdminUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(private usersRepository: UsersRepository) {}
 
   execute({ user_id }: IRequest): User {
-    // Complete aqui
+    const userExists = this.usersRepository.findById(user_id);
+
+    if (!userExists) {
+      throw new Error("Mensagem do erro");
+    }
+
+    const userAdmin = this.usersRepository.turnAdmin(userExists);
+
+    return userAdmin;
   }
 }
 
